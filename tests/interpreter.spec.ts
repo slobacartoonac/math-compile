@@ -48,4 +48,12 @@ describe('Test interpreter', () => {
     let exp = parseProgram('(x2-2)/2')
     expect(evaluate(exp, {x2: 4})).to.equal(1);
   });
+  it('expect brakets and numbers and plus', () => {
+    let exp = parseProgram('(x2-2)/2+1')
+    expect(evaluate(exp, {x2: 4})).to.equal(2);
+  });
+  it('expect brakets and numbers and plus 4', () => {
+    let exp = parseProgram('(x2-2)/2+x2*x1+2')
+    expect(evaluate(exp, {x2: 4, x1: 3})).to.equal(15);
+  });
 });

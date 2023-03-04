@@ -24,8 +24,17 @@ function isOperation(){
     TokenType.tok_op_minus,
     TokenType.tok_op_multiply ,
     TokenType.tok_op_devide,
-    TokenType.tok_op_power,
-    TokenType.tok_op_modulo].includes(head().tokenType)
+    TokenType.tok_op_modulo,
+    TokenType.tok_op_power].includes(head().tokenType)
+}
+
+function opPriority(op: TokenType){
+    return (({[TokenType.tok_op_plus]: 1,
+        [TokenType.tok_op_minus]: 1,
+        [TokenType.tok_op_multiply]: 2,
+        [TokenType.tok_op_devide]: 2,
+        [TokenType.tok_op_modulo]: 4,
+        [TokenType.tok_op_power]: 5} as any)[op])
 }
 
 function isPrefix(){
@@ -82,16 +91,25 @@ export class BinaryExp extends Exp{
     }
 }
 
-
-
-function step(exp?: Exp): Exp {
-    if(match(TokenType.tok_eof) || match(TokenType.tok_close)){
-        return exp
+class BinaryExpCandidate extends Exp{
+    priority: number
+    op: TokenType
+    constructor(op: TokenType){
+        super()
+        this.priority = opPriority(op)
+        this.op = op
     }
-    if(exp && isOperation()){
+}
+
+
+function step(): Exp {
+    if(match(TokenType.tok_eof) || match(TokenType.tok_close)){
+        return null
+    }
+    if(isOperation()){
         var op = head().tokenType
         advance()
-        return new BinaryExp(exp, expression(), op)
+        return new BinaryExpCandidate(op)
     }
     if (match(TokenType.tok_open)) {
       return brackets();
@@ -102,7 +120,7 @@ function step(exp?: Exp): Exp {
     }
     if(match(TokenType.tok_op_plus)){
         advance()
-        return step(exp)
+        return step()
     }
     if(match(TokenType.tok_identifier)){
         let val = head()?.str||""
@@ -114,12 +132,32 @@ function step(exp?: Exp): Exp {
     return new NumberExp(val)
   }
 
+  function maxIndexElement(acc: Exp[]){
+    var tmp = acc.map(function(elem) {
+        if(elem instanceof BinaryExpCandidate)
+        return (elem as BinaryExpCandidate).priority;
+        return 0;
+      });
+      var maxValue = Math.max.apply(Math, tmp);
+      //find the index using the tmp array, need to convert maxValue to a string since value is of type string
+      return tmp.indexOf(maxValue);
+  }
+
   function expression(){
     let exp = null
+    let array = []
     while(!match(TokenType.tok_eof) && !match(TokenType.tok_close) 
     ){
-        exp = step(exp)
+        array.push(step())
     }
+    while(array.length>1){
+        const maxIndex = maxIndexElement(array)
+        const item = array[maxIndex] as BinaryExpCandidate
+        const left = array[maxIndex - 1]
+        const right = array[maxIndex + 1]
+        array.splice(maxIndex - 1, 3, new BinaryExp(left,right,item.op))
+    }
+    exp = array[0]
     if(exp){
         return exp
     }
@@ -133,7 +171,7 @@ function step(exp?: Exp): Exp {
   }
 
 
-export function parseProgram(program: string){
+export function parseProgram(program: string): Exp{
     tokens = tokenize(program)
     current = 0;
     return expression()
