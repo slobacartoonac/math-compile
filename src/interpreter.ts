@@ -1,7 +1,7 @@
 import { TokenType } from "./lexer";
 import { BinaryExp, BracketsExp, Exp, IdentifierExp, NoopExp, NumberExp } from "./parser";
 
-interface Parameters{
+export interface Parameters{
     [key: string]: number
 }
 
