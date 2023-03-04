@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/x-icon" href="/icon64.png">
+    <style>
+        span {
+            -webkit-user-select: none;
+            /* Safari */
+            -ms-user-select: none;
+            /* IE 10 and IE 11 */
+            user-select: none;
+            /* Standard syntax */
+        }
+
+        .noselect {
+            /* position: relative; */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            touch-action: none;
+            background: gray;
+            color: gray;
+            padding: 0px;
+            margin: 0px;
+            width: calc(100vw);
+            overflow: hidden;
+            /* border: "thick solid #00FFFF"; */
+            /* display: flex;*/
+            /* Hide scrollbars */
+        }
+
+        .music-credits {
+            position: absolute;
+            top: 10px;
+            left: 30px;
+        }
+
+        a {
+            color: #aaf;
+        }
+    </style>
+
+    <link rel="manifest" href="./manifest.json">
+    <link rel="stylesheet" href="modal.module.css">
+</head>
+
+<body class='noselect'>
+    <audio>
+        <source src="./music/positive-cartoon-loop-109009.mp3" type="audio/mpeg">
+        Your browser does not support the audio tag.
+    </audio>
+    <div class="music-credits">
+        Music by <a
+            href="https://pixabay.com/users/sergequadrado-24990007/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=109009">SergeQuadrado</a>
+        from <a
+            href="https://pixabay.com//?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=109009">Pixabay</a>
+    </div>
+    <!-- <div class="futur">
+    </div> -->
+    <script src="build/main.bundle.js"></script>
+    <script>
+        // if ("virtualKeyboard" in navigator) {
+        //     navigator.virtualKeyboard.overlaysContent = true;
+        // }
+        setTimeout(() => {
+            let doc = document.getElementsByClassName('music-credits')[0]
+            if (doc) {
+                doc.style.visibility = "hidden";
+            }
+        }, 5000)
+        if (!navigator.serviceWorker.controller) {
+            navigator.serviceWorker.register("./sw.js").then(function (reg) {
+                console.log("Service worker has been registered for scope: " + reg.scope);
+            });
+        }
+    </script>
+</body>
+
+</html>
