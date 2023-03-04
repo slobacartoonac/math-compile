@@ -2,12 +2,14 @@ import { TokenType, Token, tokenize} from './lexer';
 
 let tokens: Token[];
 let current = 0;
+let currentTok: Token
 function advance(){
     current++
     if(tokens.length <= current){
         current = tokens.length -1
         return new Token(TokenType.tok_eof,0,0)
     }
+    currentTok = tokens[current]
     return tokens[current]
 }
 function head(): Token{
@@ -33,6 +35,7 @@ function isPrefix(){
 export class Exp {}
 
 export class NoopExp extends Exp{}
+
 export class NegateExp extends Exp{
     expression: Exp
     constructor(expression: Exp){
@@ -94,6 +97,7 @@ function step(exp?: Exp): Exp {
       return brackets();
     }
     if(match(TokenType.tok_op_minus)){
+        advance()
         return new NegateExp(expression())
     }
     if(match(TokenType.tok_op_plus)){
@@ -101,23 +105,25 @@ function step(exp?: Exp): Exp {
         return step(exp)
     }
     if(match(TokenType.tok_identifier)){
-        return new IdentifierExp(head()?.str||"")
+        let val = head()?.str||""
+        advance()
+        return new IdentifierExp(val)
     }
-    return new NumberExp(head()?.value||0)
+    let val = head()?.value || 0
+    advance()
+    return new NumberExp(val)
   }
 
   function expression(){
     let exp = null
-    while(!match(TokenType.tok_eof) 
-    && !match(TokenType.tok_close)
+    while(!match(TokenType.tok_eof) && !match(TokenType.tok_close) 
     ){
         exp = step(exp)
-        advance()
     }
-    if(!exp){
-        return new NumberExp(0)
+    if(exp){
+        return exp
     }
-    return exp
+    return new NumberExp(0)
 }
   function brackets(){
     advance()
