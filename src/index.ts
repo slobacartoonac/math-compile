@@ -2,7 +2,7 @@ import { Exp, NoopExp, parseProgram } from "./parser";
 import { evaluate, Parameters } from "./interpreter";
 
 let programs:{[program: string]: Exp} = {}
-function execute(program: string, params:Parameters ){
+export function execute(program: string, params:Parameters ){
     let err = ''
     let res = 0;
     try{
@@ -20,4 +20,4 @@ function execute(program: string, params:Parameters ){
     return {res, err}
 }
 
-export {execute, evaluate, parseProgram}
+export { evaluate, parseProgram}
