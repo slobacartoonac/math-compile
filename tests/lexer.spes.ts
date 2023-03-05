@@ -1,4 +1,4 @@
-import {getNextToken, IdentifierStr, NumVal, setInput, tokenize, TokenType} from '../src/lexer';
+import {getNextToken, IdentifierStr, NumVal, setInput, Token, tokenize, TokenType} from '../src/lexer';
 import { expect } from 'chai';
 import 'mocha'
 // if you used the '@types/mocha' method to install mocha type definitions, uncomment the following line
@@ -42,21 +42,21 @@ describe('Test lexer', () => {
   });
   it('expect brakets and numbers but as a whole', () => {
     let tokens = tokenize('(x2-2.2)\n/5')
-    let tok = tokens.shift();
+    let tok = tokens.shift() || new Token(TokenType.tok_eof,0,0);
     expect(tok.tokenType).to.equal(TokenType.tok_open);
-    tok = tokens.shift();
+    tok = tokens.shift() || new Token(TokenType.tok_eof,0,0);
     expect(tok.tokenType).to.equal(TokenType.tok_identifier);
     expect(tok.str).to.equal('x2');
-    tok = tokens.shift();
+    tok = tokens.shift() || new Token(TokenType.tok_eof,0,0);
     expect(tok.tokenType).to.equal(TokenType.tok_op_minus);
-    tok = tokens.shift();
+    tok = tokens.shift() || new Token(TokenType.tok_eof,0,0);
     expect(tok.tokenType).to.equal(TokenType.tok_number);
     expect(tok.value).to.equal(2.2);
-    tok = tokens.shift();
+    tok = tokens.shift() || new Token(TokenType.tok_eof,0,0);
     expect(tok.tokenType).to.equal(TokenType.tok_close);
-    tok = tokens.shift();
+    tok = tokens.shift() || new Token(TokenType.tok_eof,0,0);
     expect(tok.tokenType).to.equal(TokenType.tok_op_devide);
-    tok = tokens.shift();
+    tok = tokens.shift() || new Token(TokenType.tok_eof,0,0);
     expect(tok.tokenType).to.equal(TokenType.tok_number);
     expect(tok.value).to.equal(5);
   });

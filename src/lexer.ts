@@ -30,7 +30,7 @@ export function setInput(_program: string){
     CurTok = null
 }
 
-export function tokenize(program: string){
+export function tokenize(program: string): Token[]{
     setInput(program)
     let tokens = [];
     while(CurTok!=TokenType.tok_eof){
