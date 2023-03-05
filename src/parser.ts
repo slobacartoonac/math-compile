@@ -28,6 +28,31 @@ function isOperation(){
     TokenType.tok_op_power].includes(head().tokenType)
 }
 
+
+export enum FunctionType {
+    sin,
+    cos,
+    tan,
+    round,
+    floor,
+    ceil,
+    abs,
+    sqrt,
+    exp,
+    log,
+    log10
+}
+
+export const functionList: string[] = Object.keys(FunctionType)
+
+function isFunction(str: string){
+    return functionList.includes(str.toLowerCase())
+}
+
+function indexOfFunction(str: string){
+    return functionList.indexOf(str.toLowerCase())
+}
+
 function opPriority(op: TokenType){
     return (({[TokenType.tok_op_plus]: 1,
         [TokenType.tok_op_minus]: 1,
@@ -91,6 +116,19 @@ export class BinaryExp extends Exp{
     }
 }
 
+export class FunctionExp  extends Exp{
+    expression: Exp
+    func: FunctionType
+    constructor(
+        expression: Exp,
+        func: FunctionType
+        ){
+            super()
+            this.expression = expression
+            this.func =func
+        }
+}
+
 class BinaryExpCandidate extends Exp{
     priority: number
     op: TokenType
@@ -102,13 +140,17 @@ class BinaryExpCandidate extends Exp{
 }
 
 
-function step(): Exp {
+function step(prev?: Exp): Exp {
     if(match(TokenType.tok_eof) || match(TokenType.tok_close)){
         return null
     }
-    if(isOperation()){
+    if(prev && isOperation()){
         var op = head().tokenType
         advance()
+        if(op == TokenType.tok_op_multiply && head().tokenType == TokenType.tok_op_multiply){
+            advance()
+            return new BinaryExpCandidate(TokenType.tok_op_power)
+        }
         return new BinaryExpCandidate(op)
     }
     if (match(TokenType.tok_open)) {
@@ -120,11 +162,15 @@ function step(): Exp {
     }
     if(match(TokenType.tok_op_plus)){
         advance()
-        return step()
+        return step(prev)
     }
     if(match(TokenType.tok_identifier)){
         let val = head()?.str||""
         advance()
+        if(isFunction(val)){
+            let typedFunctionTypeString = val as keyof typeof FunctionType;
+            return new FunctionExp(expression(), FunctionType[typedFunctionTypeString])
+        }
         return new IdentifierExp(val)
     }
     let val = head()?.value || 0
@@ -145,10 +191,10 @@ function step(): Exp {
 
   function expression(){
     let exp = null
-    let array = []
+    let array: Exp[] = []
     while(!match(TokenType.tok_eof) && !match(TokenType.tok_close) 
     ){
-        array.push(step())
+        array.push(step(array[array.length-1]))
     }
     while(array.length>1){
         const maxIndex = maxIndexElement(array)

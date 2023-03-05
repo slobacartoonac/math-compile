@@ -1,6 +1,7 @@
-import {BinaryExp, BracketsExp, IdentifierExp, NumberExp, parseProgram} from '../src/parser';
+import {BinaryExp, BracketsExp, FunctionExp, FunctionType, IdentifierExp, NegateExp, NumberExp, parseProgram} from '../src/parser';
 import { expect } from 'chai';
 import 'mocha'
+import { TokenType } from '../src/lexer';
 // if you used the '@types/mocha' method to install mocha type definitions, uncomment the following line
 // import 'mocha';
 
@@ -24,6 +25,12 @@ describe('Test parser', () => {
     expect((exp as BinaryExp).right instanceof IdentifierExp).to.equal(true);
   });
 
+  it('expect unarry number token', () => {
+    let exp = parseProgram('-2')
+    expect(exp instanceof NegateExp).to.equal(true);
+    expect((exp as NegateExp).expression instanceof NumberExp).to.equal(true);
+  });
+
   it('expect multiply then add 1', () => {
     let exp = parseProgram('2.2+x2*2')
     expect(exp instanceof BinaryExp).to.equal(true);
@@ -37,6 +44,19 @@ describe('Test parser', () => {
     expect((exp as BinaryExp).left instanceof BinaryExp).to.equal(true);
     expect((exp as BinaryExp).right instanceof NumberExp).to.equal(true);
   });
+  it('expect multiply twice is power', () => {
+    let exp = parseProgram('3**2')
+    expect(exp instanceof BinaryExp).to.equal(true);
+    expect((exp as BinaryExp).op).to.equal(TokenType.tok_op_power);
+  });
+
+  it('expect func call', () => {
+    let exp = parseProgram('sin 2')
+    expect(exp instanceof FunctionExp).to.equal(true);
+    expect((exp as FunctionExp).func).to.equal(FunctionType.sin);
+    expect((exp as FunctionExp).expression instanceof NumberExp).to.equal(true);
+  });
+
   it('expect brakets', () => {
     let exp = parseProgram('(2)')
     expect(exp instanceof BracketsExp).to.equal(true);

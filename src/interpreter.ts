@@ -1,5 +1,5 @@
 import { TokenType } from "./lexer";
-import { BinaryExp, BracketsExp, Exp, IdentifierExp, NoopExp, NumberExp } from "./parser";
+import { BinaryExp, BracketsExp, Exp, FunctionExp, FunctionType, IdentifierExp, NoopExp, NumberExp } from "./parser";
 
 export interface Parameters{
     [key: string]: number
@@ -28,10 +28,43 @@ function doOperation(left: number, right: number, op: TokenType): number {
         case TokenType.tok_op_modulo:
             return left % right
         default:
-            throw new Error("Operation "+ op+" unknown")
+            throw new Error("Operation "+ op +" unknown")
     }
 }
 
+function doFunction(arg: number, func: FunctionType): number {
+    switch(func){
+        case FunctionType.sin:
+            return Math.sin(arg)
+        case FunctionType.cos:
+            return Math.cos(arg)
+        case FunctionType.tan:
+            return Math.tan(arg)
+        case FunctionType.round:
+            return Math.round(arg)
+        case FunctionType.floor:
+            return Math.floor(arg)
+        case FunctionType.ceil:
+            return Math.ceil(arg)
+        case FunctionType.abs:
+            return Math.abs(arg)
+        case FunctionType.sqrt:
+            return Math.sqrt(arg)
+        case FunctionType.exp:
+            return Math.exp(arg)
+        case FunctionType.log:
+            return Math.log(arg)
+        case FunctionType.log10:
+            return Math.log10(arg)
+        default:
+            throw new Error("Function "+ func +" unknown")
+    }
+}
+
+export const builtIn = {
+    pi: Math.PI,
+    e: Math.E,
+} as {[key: string]: number}
 
 export function evaluate(expression: Exp, parameters: Parameters = {}): number{
     switch(true){
@@ -42,7 +75,13 @@ export function evaluate(expression: Exp, parameters: Parameters = {}): number{
             return doOperation(evaluate(bin.left, parameters), evaluate(bin.right, parameters), bin.op)
         case expression instanceof IdentifierExp:
             let indent = expression as IdentifierExp;
-            return parameters[indent.value]
+            if(parameters[indent.value] !== undefined){
+                return parameters[indent.value]
+            }
+            if(builtIn[indent.value.toLowerCase()] !== undefined){
+                return builtIn[indent.value.toLowerCase()]
+            }
+            return  -1
         case expression instanceof NumberExp:
             let num = expression as NumberExp;
             return num.value
@@ -52,6 +91,9 @@ export function evaluate(expression: Exp, parameters: Parameters = {}): number{
         case expression instanceof NegateExp:
             let negate = expression as NegateExp;
             return -evaluate(negate.expression, parameters)
+        case expression instanceof FunctionExp:
+            let func = expression as FunctionExp;
+            return doFunction(evaluate(func.expression, parameters), func.func)
         default: 
         return  -1;
     }
