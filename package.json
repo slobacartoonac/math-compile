@@ -1,13 +1,9 @@
 {
   "name": "type-math",
   "mode": "development",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "\"Type math safe and resolve\"",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
-  "files": [
-    "/build"
-  ],
+  "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "watch": "webpack --watch --config webpack.dev.js",
