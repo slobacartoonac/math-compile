@@ -94,4 +94,9 @@ describe('Test interpreter', () => {
     exp = parseProgram('sqrt 9')
     expect(evaluate(exp)).to.equal(3);
   });
+
+  it('expect func log and sqrt then add 3', () => {
+    let exp = parseProgram('sqrt 9 + 3')
+    expect(evaluate(exp)).to.equal(6);
+  });
 });

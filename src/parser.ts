@@ -177,7 +177,7 @@ function step(prev?: Exp): Exp {
         advance()
         if(isFunction(val)){
             let typedFunctionTypeString = val as keyof typeof FunctionType;
-            return new FunctionExp(expression(), FunctionType[typedFunctionTypeString])
+            return new FunctionExp(step(), FunctionType[typedFunctionTypeString])
         }
         return new IdentifierExp(val)
     }
