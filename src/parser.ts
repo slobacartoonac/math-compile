@@ -19,13 +19,13 @@ function match(_type: TokenType){
     return head().tokenType === _type
 }
 
-function isOperation(){
+function isOperation(op: TokenType = head().tokenType){
     return [TokenType.tok_op_plus,
     TokenType.tok_op_minus,
     TokenType.tok_op_multiply ,
     TokenType.tok_op_devide,
     TokenType.tok_op_modulo,
-    TokenType.tok_op_power].includes(head().tokenType)
+    TokenType.tok_op_power].includes(op)
 }
 
 
@@ -153,9 +153,7 @@ function step(prev?: Exp): Exp {
         }
         return new BinaryExpCandidate(op)
     }
-    if (match(TokenType.tok_open)) {
-      return brackets();
-    }
+
     if(match(TokenType.tok_op_minus)){
         advance()
         return new NegateExp(expression())
@@ -163,6 +161,16 @@ function step(prev?: Exp): Exp {
     if(match(TokenType.tok_op_plus)){
         advance()
         return step(prev)
+    }
+
+    if(prev){
+        if(!(prev instanceof BinaryExpCandidate)){
+            return new BinaryExpCandidate(TokenType.tok_op_multiply)
+        }
+    }
+
+    if (match(TokenType.tok_open)) {
+        return brackets();
     }
     if(match(TokenType.tok_identifier)){
         let val = head()?.str||""

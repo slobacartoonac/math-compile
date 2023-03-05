@@ -18,6 +18,13 @@ describe('Test parser', () => {
     expect((exp as IdentifierExp).value).to.equal('x2');
   });
 
+  it('expect implicit multiply', () => {
+    let exp = parseProgram('2x')
+    expect(exp instanceof BinaryExp).to.equal(true);
+    expect((exp as BinaryExp).left instanceof NumberExp).to.equal(true);
+    expect((exp as BinaryExp).right instanceof IdentifierExp).to.equal(true);
+  });
+
   it('expect number token and tok_binary', () => {
     let exp = parseProgram('2.2+x2')
     expect(exp instanceof BinaryExp).to.equal(true);
