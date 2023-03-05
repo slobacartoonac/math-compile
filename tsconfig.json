@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "outDir": "lib", /* Redirect output to the directory. */
         "noImplicitAny": true,
         "sourceMap": true,
         "module": "commonjs",
