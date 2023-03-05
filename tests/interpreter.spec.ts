@@ -21,6 +21,12 @@ describe('Test interpreter', () => {
     expect(evaluate(exp, {x2: 2})).to.equal(4);
   });
 
+
+  it('expect negate', () => {
+    let exp = parseProgram('-2')
+    expect(evaluate(exp)).to.equal(-2);
+  });
+
   it('expect multiply then add 1', () => {
     let exp = parseProgram('2+x2*2')
     expect(evaluate(exp, {x2: 2})).to.equal(6);

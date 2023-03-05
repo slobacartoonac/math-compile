@@ -1,17 +1,14 @@
 import { TokenType } from "./lexer";
-import { BinaryExp, BracketsExp, Exp, FunctionExp, FunctionType, IdentifierExp, NoopExp, NumberExp } from "./parser";
+import { BinaryExp, BracketsExp, Exp, FunctionExp, FunctionType, IdentifierExp, NegateExp, NoopExp, NumberExp } from "./parser";
 
 export interface Parameters{
     [key: string]: number
 }
 
-export class NegateExp extends Exp{
-    expression: Exp
-    constructor(expression: Exp){
-        super()
-        this.expression=expression
-    }
-}
+export const builtIn = {
+    pi: Math.PI,
+    e: Math.E,
+} as Parameters
 
 function doOperation(left: number, right: number, op: TokenType): number {
     switch(op){
@@ -61,10 +58,7 @@ function doFunction(arg: number, func: FunctionType): number {
     }
 }
 
-export const builtIn = {
-    pi: Math.PI,
-    e: Math.E,
-} as {[key: string]: number}
+
 
 export function evaluate(expression: Exp, parameters: Parameters = {}): number{
     switch(true){
