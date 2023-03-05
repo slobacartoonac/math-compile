@@ -18,8 +18,9 @@ module.exports = {
 		extensions: ['.tsx', '.ts', '.js'],
 	},
 	output: {
-		filename: 'index.js',
+		filename: 'type-math.js',
 		path: path.resolve(__dirname, 'lib'),
-		clean: true,
+		library: 'TypeMath',
+		libraryTarget: 'umd',
 	},
 };
