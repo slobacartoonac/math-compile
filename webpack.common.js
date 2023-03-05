@@ -18,8 +18,8 @@ module.exports = {
 		extensions: ['.tsx', '.ts', '.js'],
 	},
 	output: {
-		filename: '[name].bundle.js',
-		path: path.resolve(__dirname, 'build'),
+		filename: 'index.js',
+		path: path.resolve(__dirname, 'lib'),
 		publicPath: '/',
 		clean: true,
 	},

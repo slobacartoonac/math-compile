@@ -3,7 +3,9 @@
   "mode": "development",
   "version": "1.12.0",
   "description": "\"Type math safe and resolve\"",
-  "main": "index.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "watch": "webpack --watch --config webpack.dev.js",
