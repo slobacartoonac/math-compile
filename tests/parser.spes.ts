@@ -86,4 +86,11 @@ describe('Test parser', () => {
     expect((exp as BinaryExp).left instanceof BracketsExp).to.equal(true);
     expect((exp as BinaryExp).right instanceof NumberExp).to.equal(true);
   });
+
+  it('expect random exp', () => {
+    let exp = parseProgram('x**-')
+    expect(exp instanceof BinaryExp).to.equal(true);
+    expect((exp as BinaryExp).left instanceof IdentifierExp).to.equal(true);
+    expect((exp as BinaryExp).right instanceof NegateExp).to.equal(true);
+  });
 });

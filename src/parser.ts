@@ -144,7 +144,8 @@ function step(prev?: Exp): Exp {
     if(match(TokenType.tok_eof) || match(TokenType.tok_close)){
         return null
     }
-    if(prev && isOperation()){
+    let prevAthom = prev && !(prev instanceof BinaryExpCandidate)
+    if(prevAthom && isOperation()){
         var op = head().tokenType
         advance()
         if(op == TokenType.tok_op_multiply && head().tokenType == TokenType.tok_op_multiply){
