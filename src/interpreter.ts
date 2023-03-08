@@ -33,10 +33,30 @@ function doFunction(arg: number, func: FunctionType): number {
     switch(func){
         case FunctionType.sin:
             return Math.sin(arg)
+        case FunctionType.asin:
+            return Math.asin(arg)
+        case FunctionType.sinh:
+            return Math.sinh(arg)
+        case FunctionType.asinh:
+            return Math.asinh(arg)
         case FunctionType.cos:
             return Math.cos(arg)
+        case FunctionType.acos:
+            return Math.acos(arg)
+        case FunctionType.cosh:
+            return Math.cosh(arg)
+        case FunctionType.acos:
+            return Math.acos(arg)
+        case FunctionType.acosh:
+            return Math.acosh(arg)
         case FunctionType.tan:
             return Math.tan(arg)
+        case FunctionType.atan:
+            return Math.atan(arg)
+        case FunctionType.tanh:
+            return Math.tanh(arg)
+        case FunctionType.atanh:
+            return Math.atanh(arg)
         case FunctionType.round:
             return Math.round(arg)
         case FunctionType.floor:
@@ -49,6 +69,7 @@ function doFunction(arg: number, func: FunctionType): number {
             return Math.sqrt(arg)
         case FunctionType.exp:
             return Math.exp(arg)
+        case FunctionType.ln:
         case FunctionType.log:
             return Math.log(arg)
         case FunctionType.log10:

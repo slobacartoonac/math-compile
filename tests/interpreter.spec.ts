@@ -95,8 +95,18 @@ describe('Test interpreter', () => {
     expect(evaluate(exp)).to.equal(3);
   });
 
-  it('expect func log and sqrt then add 3', () => {
+  it('expect func sqrt then add 3', () => {
     let exp = parseProgram('sqrt 9 + 3')
     expect(evaluate(exp)).to.equal(6);
+  });
+
+  it('expect func acosh', () => {
+    let exp = parseProgram('acosh 1.0001')
+    expect(evaluate(exp)).to.lessThan(0.02);
+  });
+
+  it('expect ln and log to be equal', () => {
+    let exp = parseProgram('ln x - log x')
+    expect(evaluate(exp, {x: 5})).to.lessThan(0.00001);
   });
 });

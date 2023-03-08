@@ -1,16 +1,26 @@
 import { TokenType } from './lexer';
 export declare enum FunctionType {
     sin = 0,
-    cos = 1,
-    tan = 2,
-    round = 3,
-    floor = 4,
-    ceil = 5,
-    abs = 6,
-    sqrt = 7,
-    exp = 8,
-    log = 9,
-    log10 = 10
+    asin = 1,
+    sinh = 2,
+    asinh = 3,
+    cos = 4,
+    acos = 5,
+    cosh = 6,
+    acosh = 7,
+    tan = 8,
+    atan = 9,
+    tanh = 10,
+    atanh = 11,
+    round = 12,
+    floor = 13,
+    ceil = 14,
+    abs = 15,
+    sqrt = 16,
+    exp = 17,
+    log = 18,
+    log10 = 19,
+    ln = 20
 }
 export declare const functionList: string[];
 export declare class Exp {

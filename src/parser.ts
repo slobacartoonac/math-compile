@@ -29,10 +29,33 @@ function isOperation(op: TokenType = head().tokenType){
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export enum FunctionType {
     sin,
+    asin,
+    sinh,
+    asinh,
     cos,
+    acos,
+    cosh,
+    acosh,
     tan,
+    atan,
+    tanh,
+    atanh,
     round,
     floor,
     ceil,
@@ -40,7 +63,8 @@ export enum FunctionType {
     sqrt,
     exp,
     log,
-    log10
+    log10,
+    ln
 }
 
 export const functionList: string[] = Object.keys(FunctionType)
