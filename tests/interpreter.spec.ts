@@ -109,4 +109,14 @@ describe('Test interpreter', () => {
     let exp = parseProgram('ln x - log x')
     expect(evaluate(exp, {x: 5})).to.lessThan(0.00001);
   });
+
+  it('expect 3-2+3 equal 4', () => {
+    let exp = parseProgram('3-2*2+3-1')
+    expect(evaluate(exp)).to.equal(1);
+  });
+
+  // it('expect 3! equal 6', () => {
+  //   let exp = parseProgram('3!')
+  //   expect(evaluate(exp)).to.equal(6);
+  // });
 });

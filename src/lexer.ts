@@ -42,8 +42,8 @@ export function tokenize(program: string): Token[]{
 
 // The lexer returns tokens [0-255] if it is an unknown character, otherwise one
 // of these for known things.
-export enum TokenType
-{
+
+export enum TokenType {
     tok_eof = "tok_eof",
     // primary
     tok_identifier = "tok_identifier",
@@ -60,6 +60,7 @@ export enum TokenType
     // brackets
     tok_open = "tok_open",
     tok_close = "tok_close",
+    tok_op_factorial = "tok_op_factorial"
 };
 
 interface SourceLocation
@@ -175,6 +176,11 @@ function gettok(): TokenType
     if(LastChar == "%"){
         LastChar = advance();
         return TokenType.tok_op_modulo;
+    }
+
+    if(LastChar == "!"){
+        LastChar = advance();
+        return TokenType.tok_op_factorial;
     }
 
     if (["{","[","("].includes(LastChar)){

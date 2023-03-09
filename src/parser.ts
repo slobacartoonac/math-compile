@@ -15,6 +15,12 @@ function advance(){
 function head(): Token{
     return tokens[current]
 }
+function last(): Token{
+    if(current>0){
+        throw new Error("Trying last on first")
+    }
+    return tokens[current-1]
+}
 function match(_type: TokenType){
     return head().tokenType === _type
 }
@@ -153,6 +159,16 @@ export class FunctionExp  extends Exp{
         }
 }
 
+export class FactorialExp  extends Exp{
+    expression: Exp
+    constructor(
+        expression: Exp,
+        ){
+            super()
+            this.expression = expression
+        }
+}
+
 class BinaryExpCandidate extends Exp{
     priority: number
     op: TokenType
@@ -206,9 +222,12 @@ function step(prev?: Exp): Exp {
         }
         return new IdentifierExp(val)
     }
-    let val = head()?.value || 0
-    advance()
-    return new NumberExp(val)
+    if(match(TokenType.tok_number)){
+        let val = head()?.value || 0
+        advance()
+        return new NumberExp(val)
+    }
+    throw new Error("Unexpected token: "+head().tokenType+`at: (${head().column},${head().line})`)
   }
 
   function maxIndexElement(acc: Exp[]){
