@@ -93,4 +93,16 @@ describe('Test parser', () => {
     expect((exp as BinaryExp).left instanceof IdentifierExp).to.equal(true);
     expect((exp as BinaryExp).right instanceof NegateExp).to.equal(true);
   });
+  it('expect factorial function', () => {
+    let exp = parseProgram('x!')
+    expect(exp instanceof FunctionExp).to.equal(true);
+    expect((exp as FunctionExp).expression instanceof IdentifierExp).to.equal(true);
+  });
+  it('expect factorial function combinate binarry', () => {
+    let exp = parseProgram('x+x!*2')
+    expect(exp instanceof BinaryExp).to.equal(true);
+    expect((exp as BinaryExp).left instanceof IdentifierExp).to.equal(true);
+    expect((exp as BinaryExp).right instanceof BinaryExp).to.equal(true);
+    expect(((exp as BinaryExp).right as BinaryExp).left instanceof FunctionExp).to.equal(true);
+  });
 });

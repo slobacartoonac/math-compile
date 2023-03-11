@@ -49,6 +49,22 @@ function isOperation(op: TokenType = head().tokenType){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export enum FunctionType {
     sin,
     asin,
@@ -70,7 +86,8 @@ export enum FunctionType {
     exp,
     log,
     log10,
-    ln
+    ln,
+    factorial
 }
 
 export const functionList: string[] = Object.keys(FunctionType)
@@ -159,14 +176,7 @@ export class FunctionExp  extends Exp{
         }
 }
 
-export class FactorialExp  extends Exp{
-    expression: Exp
-    constructor(
-        expression: Exp,
-        ){
-            super()
-            this.expression = expression
-        }
+export class FactorialExpCandidate  extends Exp{
 }
 
 class BinaryExpCandidate extends Exp{
@@ -205,11 +215,14 @@ function step(prev?: Exp): Exp {
     }
 
     if(prev){
+        if(match(TokenType.tok_op_factorial)){
+            advance()
+            return new FactorialExpCandidate()
+        }
         if(!(prev instanceof BinaryExpCandidate)){
             return new BinaryExpCandidate(TokenType.tok_op_multiply)
         }
     }
-
     if (match(TokenType.tok_open)) {
         return brackets();
     }
@@ -227,7 +240,7 @@ function step(prev?: Exp): Exp {
         advance()
         return new NumberExp(val)
     }
-    throw new Error("Unexpected token: "+head().tokenType+`at: (${head().column},${head().line})`)
+    throw new Error("Unexpected token: "+head().tokenType+` at: (${head().column},${head().line})`)
   }
 
   function maxIndexElement(acc: Exp[]){
@@ -240,6 +253,13 @@ function step(prev?: Exp): Exp {
       //find the index using the tmp array, need to convert maxValue to a string since value is of type string
       return tmp.indexOf(maxValue);
   }
+  function leftAscIndexElement(acc: Exp[]){
+    return acc.findIndex(function(elem) {
+        if(elem instanceof FactorialExpCandidate)
+            return true
+        return false
+      });
+  }
 
   function expression(){
     let exp = null
@@ -248,6 +268,14 @@ function step(prev?: Exp): Exp {
     ){
         array.push(step(array[array.length-1]))
     }
+    let leftAscIndex = leftAscIndexElement(array)
+    while(leftAscIndex>-1){
+        //const item = array[leftAscIndex] as BinaryExpCandidate
+        const left = array[leftAscIndex - 1]
+        array.splice(leftAscIndex - 1, 2, new FunctionExp(left, FunctionType.factorial))
+        leftAscIndex = leftAscIndexElement(array)
+    }
+
     while(array.length>1){
         const maxIndex = maxIndexElement(array)
         const item = array[maxIndex] as BinaryExpCandidate

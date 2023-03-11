@@ -114,9 +114,8 @@ describe('Test interpreter', () => {
     let exp = parseProgram('3-2*2+3-1')
     expect(evaluate(exp)).to.equal(1);
   });
-
-  // it('expect 3! equal 6', () => {
-  //   let exp = parseProgram('3!')
-  //   expect(evaluate(exp)).to.equal(6);
-  // });
+  it('expect x+(x+1)!*2 equal 51 = 3 + 24 * 2', () => {
+    let exp = parseProgram('x+(x+1)!*2')
+    expect(evaluate(exp, {x: 3})).to.equal(51);
+  });
 });

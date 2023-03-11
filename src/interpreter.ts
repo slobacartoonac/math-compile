@@ -10,6 +10,17 @@ export const builtIn = {
     e: Math.E,
 } as Parameters
 
+function factorialize(num: number) {
+    var result = num;
+    if (num === 0 || num === 1) 
+      return 1; 
+    while (num > 1) { 
+      num--;
+      result *= num;
+    }
+    return result;
+  }
+
 function doOperation(left: number, right: number, op: TokenType): number {
     switch(op){
         case TokenType.tok_op_plus:
@@ -74,6 +85,8 @@ function doFunction(arg: number, func: FunctionType): number {
             return Math.log(arg)
         case FunctionType.log10:
             return Math.log10(arg)
+        case FunctionType.factorial:
+            return factorialize(arg)
         default:
             throw new Error("Function "+ func +" unknown")
     }
