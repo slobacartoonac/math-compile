@@ -10,7 +10,7 @@ export const builtIn = {
     e: Math.E,
 } as Parameters
 
-function factorialize(num: number) {
+function factorOfWhole(num: number){
     var result = num;
     if (num === 0 || num === 1) 
       return 1; 
@@ -19,6 +19,24 @@ function factorialize(num: number) {
       result *= num;
     }
     return result;
+}
+
+function factorOfReal(num: number){
+    var N = 25;
+    var x = num+1;
+    var result = Math.pow(N,num);
+    for(var k=1; k<N; k++){
+        result *= k/x++
+    }
+    return result
+}
+
+function factorialize(num: number) {
+    if(num % 1){
+        return factorOfReal(num)
+    } else {    
+        return factorOfWhole(num)
+    }
   }
 
 function doOperation(left: number, right: number, op: TokenType): number {

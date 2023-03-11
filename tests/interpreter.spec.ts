@@ -118,4 +118,14 @@ describe('Test interpreter', () => {
     let exp = parseProgram('x+(x+1)!*2')
     expect(evaluate(exp, {x: 3})).to.equal(51);
   });
+
+  it('expect x! in parts', () => {
+    let exp = parseProgram('x!')
+    expect(evaluate(exp, {x: 3})).to.equal(6);
+    expect(evaluate(exp, {x: 4})).to.equal(24);
+    expect(evaluate(exp, {x: 3.1})).to.greaterThan(6);
+    expect(evaluate(exp, {x: 3.1})).to.lessThan(9);
+    expect(evaluate(exp, {x: 3.99})).to.greaterThan(18);
+    expect(evaluate(exp, {x: 3.99})).to.lessThan(24);
+  });
 });
