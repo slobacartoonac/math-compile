@@ -16,7 +16,8 @@ export declare enum TokenType {
     tok_op_power = "tok_op_power",
     tok_op_modulo = "tok_op_modulo",
     tok_open = "tok_open",
-    tok_close = "tok_close"
+    tok_close = "tok_close",
+    tok_op_factorial = "tok_op_factorial"
 }
 export declare class Token {
     tokenType: TokenType;

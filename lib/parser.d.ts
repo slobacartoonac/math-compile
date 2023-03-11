@@ -20,7 +20,8 @@ export declare enum FunctionType {
     exp = 17,
     log = 18,
     log10 = 19,
-    ln = 20
+    ln = 20,
+    factorial = 21
 }
 export declare const functionList: string[];
 export declare class Exp {
@@ -53,5 +54,7 @@ export declare class FunctionExp extends Exp {
     expression: Exp;
     func: FunctionType;
     constructor(expression: Exp, func: FunctionType);
+}
+export declare class FactorialExpCandidate extends Exp {
 }
 export declare function parseProgram(program: string): Exp;
