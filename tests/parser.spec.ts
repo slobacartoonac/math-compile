@@ -1,4 +1,4 @@
-import {BinaryExp, BracketsExp, FunctionExp, FunctionType, IdentifierExp, NegateExp, NumberExp, parseProgram} from '../src/parser';
+import {BinaryExp, BracketsExp, FunctionExp, FunctionType, IdentifierExp, NegateExp, NumberExp, parseProgram, getIndentifierTokens} from '../src/parser';
 import { expect } from 'chai';
 import 'mocha'
 import { TokenType } from '../src/lexer';
@@ -104,5 +104,9 @@ describe('Test parser', () => {
     expect((exp as BinaryExp).left instanceof IdentifierExp).to.equal(true);
     expect((exp as BinaryExp).right instanceof BinaryExp).to.equal(true);
     expect(((exp as BinaryExp).right as BinaryExp).left instanceof FunctionExp).to.equal(true);
+  });
+  it('expect indentifier tokens', () => {
+    let idents = getIndentifierTokens('2 + x - sin(y) + z3 * ab');
+    expect(idents).to.deep.equal(['x', 'y', 'z3', 'ab']);
   });
 });

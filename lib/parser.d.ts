@@ -58,3 +58,4 @@ export declare class FunctionExp extends Exp {
 export declare class FactorialExpCandidate extends Exp {
 }
 export declare function parseProgram(program: string): Exp;
+export declare function getIndentifierTokens(program: string): string[];

@@ -1,4 +1,4 @@
-import { Exp, NoopExp, parseProgram } from "./parser";
+import { Exp, NoopExp, parseProgram, getIndentifierTokens } from "./parser";
 import { evaluate, Parameters } from "./interpreter";
 
 let programs:{[program: string]: Exp} = {}
@@ -20,4 +20,4 @@ export function execute(program: string, params:Parameters = {}){
     return {res, err}
 }
 
-export { evaluate, parseProgram}
+export { evaluate, parseProgram, getIndentifierTokens }

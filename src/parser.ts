@@ -303,4 +303,19 @@ export function parseProgram(program: string): Exp{
     return expression()
 }
 
+export function getIndentifierTokens(program: string): string[] {
+    tokens = tokenize(program)
+    let identifiers: string[] = []
+    for(const tok of tokens){
+        if(tok.tokenType == TokenType.tok_identifier){
+            let val = tok.str||""
+            if(isFunction(val)){
+                continue
+            }
+            identifiers.push(tok.str)
+        }
+    }
+    return identifiers
+}
+
 
