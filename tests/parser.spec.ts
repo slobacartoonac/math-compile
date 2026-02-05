@@ -69,6 +69,13 @@ describe('Test parser', () => {
     expect(exp instanceof BracketsExp).to.equal(true);
     expect((exp as BracketsExp).expression instanceof NumberExp).to.equal(true);
   });
+
+  it('expect brakets autoclose', () => {
+    let exp = parseProgram('(2')
+    expect(exp instanceof BracketsExp).to.equal(true);
+    expect((exp as BracketsExp).expression instanceof NumberExp).to.equal(true);
+  });
+
   it('expect brakets binary', () => {
     let exp = parseProgram('(2+2)')
     expect(exp instanceof BracketsExp).to.equal(true);
@@ -105,8 +112,33 @@ describe('Test parser', () => {
     expect((exp as BinaryExp).right instanceof BinaryExp).to.equal(true);
     expect(((exp as BinaryExp).right as BinaryExp).left instanceof FunctionExp).to.equal(true);
   });
+
+  it('expect absolute sign', () => {
+    let exp = parseProgram('|x|')
+    expect(exp instanceof FunctionExp).to.equal(true);
+    expect((exp as FunctionExp).func).to.equal(FunctionType.abs);
+  });
+
+  it('expect absolute sign expression', () => {
+    let exp = parseProgram('|x+2|')
+    expect(exp instanceof FunctionExp).to.equal(true);
+    expect((exp as FunctionExp).func).to.equal(FunctionType.abs);
+  });
+
+  it('expect absolute sign expression with brackets', () => {
+    let exp = parseProgram('|(x+2)*3|')
+    expect(exp instanceof FunctionExp).to.equal(true);
+    expect((exp as FunctionExp).func).to.equal(FunctionType.abs);
+  });
+
+  it('expect absolute auto close', () => {
+    let exp = parseProgram('|x')
+    expect(exp instanceof FunctionExp).to.equal(true);
+    expect((exp as FunctionExp).func).to.equal(FunctionType.abs);
+  });
+
   it('expect indentifier tokens', () => {
-    let idents = getIndentifierTokens('2 + x - sin(y) + z3 * ab');
+    let idents = getIndentifierTokens('2 + x - sin(y) + z3 * ab + |x|');
     expect(idents).to.deep.equal(['x', 'y', 'z3', 'ab']);
   });
 });

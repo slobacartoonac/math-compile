@@ -60,7 +60,8 @@ export enum TokenType {
     // brackets
     tok_open = "tok_open",
     tok_close = "tok_close",
-    tok_op_factorial = "tok_op_factorial"
+    tok_op_factorial = "tok_op_factorial",
+    tok_open_close_abs = "tok_open_close_abs"
 };
 
 interface SourceLocation
@@ -192,7 +193,11 @@ function gettok(): TokenType
         LastChar = advance();
         return TokenType.tok_close;
     }
-    
+
+    if(LastChar == "|"){
+        LastChar = advance();
+        return TokenType.tok_open_close_abs;
+    }    
 
     if (LastChar == '#')
     {

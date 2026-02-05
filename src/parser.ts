@@ -207,7 +207,7 @@ function step(prev?: Exp): Exp {
 
     if(match(TokenType.tok_op_minus)){
         advance()
-        return new NegateExp(expression())
+        return new NegateExp(step(prev))
     }
     if(match(TokenType.tok_op_plus)){
         advance()
@@ -226,6 +226,14 @@ function step(prev?: Exp): Exp {
     if (match(TokenType.tok_open)) {
         return brackets();
     }
+
+    if (match(TokenType.tok_open_close_abs)) {
+        advance()
+        const res = expression(TokenType.tok_open_close_abs)
+        advance()
+        return new FunctionExp(res, FunctionType.abs)
+    }
+
     if(match(TokenType.tok_identifier)){
         let val = head()?.str||""
         advance()
@@ -261,10 +269,11 @@ function step(prev?: Exp): Exp {
       });
   }
 
-  function expression(){
+  function expression(specvar: TokenType = null): Exp {
     let exp = null
     let array: Exp[] = []
-    while(!match(TokenType.tok_eof) && !match(TokenType.tok_close) 
+    while(!match(TokenType.tok_eof) && !match(TokenType.tok_close) &&
+        (specvar !== TokenType.tok_open_close_abs ||  !match(TokenType.tok_open_close_abs))
     ){
         array.push(step(array[array.length-1]))
     }
@@ -281,7 +290,7 @@ function step(prev?: Exp): Exp {
         const item = array[maxIndex] as BinaryExpCandidate
         const left = array[maxIndex - 1]
         const right = array[maxIndex + 1]
-        array.splice(maxIndex - 1, 3, new BinaryExp(left,right,item.op))
+        array.splice(maxIndex - 1, 3, new BinaryExp(left, right, item.op))
     }
     exp = array[0]
     if(exp){
@@ -305,17 +314,17 @@ export function parseProgram(program: string): Exp{
 
 export function getIndentifierTokens(program: string): string[] {
     tokens = tokenize(program)
-    let identifiers: string[] = []
+    let identifiers: Set<string> = new Set()
     for(const tok of tokens){
         if(tok.tokenType == TokenType.tok_identifier){
             let val = tok.str||""
             if(isFunction(val)){
                 continue
             }
-            identifiers.push(tok.str)
+            identifiers.add(tok.str)
         }
     }
-    return identifiers
+    return Array.from(identifiers)
 }
 
 

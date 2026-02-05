@@ -32,6 +32,11 @@ describe('Test interpreter', () => {
     expect(evaluate(exp, {x2: 2})).to.equal(6);
   });
 
+  it('expect multiply by negative', () => {
+    let exp = parseProgram('(x2*-2)')
+    expect(evaluate(exp, {x2: 2})).to.equal(-4);
+  });
+
   it('expect multiply then add 2', () => {
     let exp = parseProgram('3*x2+2')
     expect(evaluate(exp, {x2: 2})).to.equal(8);
@@ -128,4 +133,34 @@ describe('Test interpreter', () => {
     expect(evaluate(exp, {x: 3.99})).to.greaterThan(18);
     expect(evaluate(exp, {x: 3.99})).to.lessThan(24);
   });
+
+  it('expect abs', () => {
+    let exp = parseProgram('|x|')
+    let rez = evaluate(exp, {x: -3})
+    expect(rez).to.equal(3);
+    expect(evaluate(exp, {x: 3})).to.equal(3);
+  });
+
+  it('expect abs expresion', () => {
+    let exp = parseProgram('|x*-3|')
+    expect(evaluate(exp, {x: -3})).to.equal(9);
+    expect(evaluate(exp, {x: 3})).to.equal(9);
+  });
+
+  it('expect brackets expresion', () => {
+    let exp = parseProgram('|(x*-3)|')
+    expect(evaluate(exp, {x: -3})).to.equal(9);
+    expect(evaluate(exp, {x: 3})).to.equal(9);
+  });
+
+    it('expect brackets and expresion', () => {
+    let exp = parseProgram('|(|x|*-3)+3*-2|')
+    expect(evaluate(exp, {x: -3})).to.equal(15);
+    expect(evaluate(exp, {x: 3})).to.equal(15);
+  });
+
+    it('expect absolute sign expression with brackets', () => {
+      let exp = parseProgram('|(x+2)*5|')
+      expect(evaluate(exp, {x: 1})).to.equal(15);
+    });
 });
